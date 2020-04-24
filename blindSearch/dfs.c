@@ -2,8 +2,7 @@
 #include "read.c"
 #include "object.c"
 #include "listObj.c"
-
-Object *optimalSolution = NULL;
+#include "extraFunctions.c"
 
 void solve(Memory *mem);
 void initiateList(List *l, Memory *m);
@@ -51,6 +50,8 @@ void solve(Memory *mem)
       else
 	for( int i=1; cur->mem[i].p!=NULL; i++ )
 	  pushObject(l, newObject(&cur->mem[i], cur));
+
+      saveMemory(cur);
     }
 
   printPath(optimalSolution);
@@ -62,27 +63,4 @@ void initiateList(List *l, Memory *m)
 {
   for ( int i=0; i<memSize; i++ )
       pushObject(l, newObject(&m[i], NULL));
-}
-
-int reachedGoal(Object *obj)
-{
-  for( int i=1; i<=nRec; i++ )
-    if ( !obj->rec[i] )
-      return 0;
-
-  return 1;
-}
-
-void potentialSol(Object *cur)
-{
-  optimalSolution = optimalSolution==NULL || pathSize(optimalSolution) > pathSize(cur) ? cur: optimalSolution;
-}
-
-int pathSize(Object *cur)
-{
-  if ( cur==NULL )
-    return 0;
-
-  else
-    return 1 + pathSize(cur->pai);
 }

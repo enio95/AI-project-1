@@ -13,7 +13,7 @@ Object *newObject(Memory *mem, Object *pai)
 
   obj->g = pai==NULL ? 0: pai->g + 1;
   
-  obj->rec = (int *)calloc(nRec+1, sizeof(int));
+  obj->rec = (char *)calloc(nRec+1, sizeof(char));
 
   if ( obj->rec == NULL )
     errorMessageMem("newObject");
@@ -49,13 +49,13 @@ void printObject(Object *obj)
   putchar('\n');
 }
 
-void printRec(int *arr, int n)
+void printRec(char *arr, int n)
 {
   printf("{");
 
   for( int i=0; i<n; i++ )
     {
-      printf("%d:%d", i, arr[i]);
+      printf("%d:%c", i, arr[i]=='1' ? '1': '0');
 
       if ( i!=n-1 )
 	printf(", ");

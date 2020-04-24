@@ -15,7 +15,7 @@
 
 typedef struct Object
 {
-  int *rec;
+  char *rec;
 
   Memory *mem;
 
@@ -25,10 +25,18 @@ typedef struct Object
   
 }Object;
 
+typedef struct Path
+{
+  struct Path *prev;
+
+  Point *p;
+  
+}Path;
+
 Object *newObject(Memory *mem, Object *pai);
 
 void printObject(Object *obj);
-void printRec(int *arr, int n);
+void printRec(char *arr, int n);
 
 void printPath(Object *obj);
 

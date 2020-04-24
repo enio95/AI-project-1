@@ -29,5 +29,5 @@ void saveMemory(Object *obj)
   if ( obj==NULL )
     return;
 
-  free(obj->rec);
+  free(obj->rec);  
 }
