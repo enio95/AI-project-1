@@ -20,6 +20,8 @@ typedef struct Object
   Memory *mem;
 
   struct Object *pai;
+
+  int g, h;
   
 }Object;
 

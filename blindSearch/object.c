@@ -10,21 +10,33 @@ Object *newObject(Memory *mem, Object *pai)
   obj->mem = mem;
 
   obj->pai = pai;
+
+  obj->g = pai==NULL ? 0: pai->g + 1;
   
   obj->rec = (int *)calloc(nRec+1, sizeof(int));
 
   if ( obj->rec == NULL )
     errorMessageMem("newObject");
 
+  obj->h = nRec;
+  
   for( int i=0; i<3; i++ )
     if ( mem->rec[i] )
-      obj->rec[mem->rec[i]] = 1;
-
+      {
+	obj->rec[mem->rec[i]] = 1;
+        obj->h--;
+      }
+  
   if ( pai!=NULL )
     for( int i=0; i<=nRec; i++ )
       if ( pai->rec[i] )
-	obj->rec[i] = 1;
+	{
+	  obj->rec[i] = 1;
+	  obj->h--;
+	}
 
+  obj->h /= 3;
+  
   return obj;	     
 }
 
