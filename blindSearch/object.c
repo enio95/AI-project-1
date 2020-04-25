@@ -1,5 +1,41 @@
 #include "object.h"
 
+ObjectArray *newObjectArray()
+{
+  ObjectArray *arr = (ObjectArray*)calloc(1, sizeof(ObjectArray));
+
+  if ( arr==NULL )
+    errorMessageMem("newObjectArray");
+
+  arr->size = 0;
+  arr->maxSize = 16384000; // change this value to be faster
+  
+  arr->obj = (Object *)calloc(arr->maxSize, sizeof(Object));
+
+  if ( arr->obj==NULL )
+    errorMessageMaxCapacity("newObjectArray");
+
+  return arr;
+}
+
+void addToObjectArray(ObjectArray *arr, Object *obj)
+{
+  if ( arr->size  == arr->maxSize  )
+    errorMessageMem("addToArray");
+  
+  Object *temp = &arr->obj[arr->size];    
+  
+  temp->index = obj->index;
+  temp->rec = obj->rec;
+  temp->pai = obj->pai;
+  temp->g = obj->g;
+  temp->h = obj->h;
+
+  arr->size++;
+  
+  free(obj);     
+}
+
 Object *newObject(Memory *mem, int index, Object *pai)
 {
   Object *obj = (Object *)calloc(1, sizeof(Object));
@@ -10,8 +46,8 @@ Object *newObject(Memory *mem, int index, Object *pai)
   obj->index = index;
 
   obj->pai = pai;
-  
-  obj->g = pai==NULL ? 0: pai->g + 1;
+
+  obj->g = pai==NULL ? 1: pai->g + 1;
   
   obj->rec = (char *)calloc(nRec+1, sizeof(char));
 
@@ -38,6 +74,16 @@ Object *newObject(Memory *mem, int index, Object *pai)
   obj->h /= 3;
   
   return obj;	     
+}
+
+void freeObjectArray(ObjectArray *arr)
+{
+  for( int i=0; i<arr->size; i++ )
+    if ( arr->obj[i].rec!=NULL )
+      free(arr->obj[i].rec);
+
+  free(arr->obj);
+  free(arr);
 }
 
 void freeObject(Object *obj)

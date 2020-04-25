@@ -8,7 +8,7 @@
 void solve(Memory *mem);
 void initiateStack(List *l, Memory *mem);
 
-int generation=1;
+int generation=2;
 
 int main()
 {
@@ -42,20 +42,18 @@ void solve(Memory *mem)
   while ( l->size > 0 )
     {
       cur = popObject(l);
+	  updatePath(path, cur->index);
 
       if ( reachedGoal(cur) )
 	{
-	  updatePath(path, cur->index);
 	  possibleSolution(sol, path);
 
 	  if ( sol->size == nRec / 3 + nRec % 3 )
 	    break;
 	}
       
-      else if ( cur->g + 1 < generation )
+      else if ( cur->g  < generation )
 	{
-	  updatePath(path, cur->index);
-
 	  for( int i=cur->index+1; i<memSize; i++ )
 	    pushObject(l, newObject(mem, i, cur));	    
 	}
@@ -73,6 +71,8 @@ void solve(Memory *mem)
       free(path);
       free(sol);
       free(l);
+
+      solve(mem);
     }
 }
 

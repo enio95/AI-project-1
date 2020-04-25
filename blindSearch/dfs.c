@@ -40,10 +40,10 @@ void solve(Memory *mem)
   while ( l->size > 0 )
     {
       cur = popObject(l);
+      updatePath(path, cur->index);
 
       if ( reachedGoal(cur) )
 	{
-	  updatePath(path, cur->index);
 	  possibleSolution(sol, path);
 
 	  if ( sol->size == nRec / 3 + nRec % 3 )
@@ -52,8 +52,6 @@ void solve(Memory *mem)
       
       else
 	{
-	  updatePath(path, cur->index);
-
 	  for( int i=cur->index+1; i<memSize; i++ )
 	    pushObject(l, newObject(mem, i, cur));	    
 	}

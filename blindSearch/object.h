@@ -25,8 +25,21 @@ typedef struct Object
   
 }Object;
 
+typedef struct ObjectArray
+{
+  Object *obj;
+
+  int size, maxSize;
+  
+}ObjectArray;
+
+
+ObjectArray *newObjectArray();
+void addToObjectArray(ObjectArray *arr, Object *obj);
+
 Object *newObject(Memory *mem, int index, Object *pai);
 
+void freeObjectArray(ObjectArray *arr);
 void freeObject(Object *obj);
 
 void printObject(Object *obj);
