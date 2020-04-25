@@ -98,7 +98,7 @@ int objectListSize(List *l)
   return l->size;
 };
 
-void printList(List *l)
+void printObjectList(List *l)
 {
   int i=0;
   

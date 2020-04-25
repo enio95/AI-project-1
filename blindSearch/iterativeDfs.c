@@ -2,10 +2,11 @@
 #include "read.c"
 #include "object.c"
 #include "listObj.c"
+#include "list.c"
 #include "extraFunctions.c"
 
 void solve(Memory *mem);
-void initiateList(List *l, Memory *m);
+void initiateStack(List *l, Memory *mem);
 
 int generation=1;
 
@@ -20,8 +21,6 @@ int main()
       
       readInput(mem);
       
-      //printMemory(mem);
-      
       solve(mem);
 
       freeMemory(mem);
@@ -33,40 +32,52 @@ int main()
 void solve(Memory *mem)
 {
   List *l = newObjectList();
+  initiateStack(l, mem);
 
-  initiateList(l, mem);
-  
+  list *path = newList();
+  list *sol = newList();
+
   Object *cur;
-
-  while ( objectListSize(l)!=0 )
+  
+  while ( l->size > 0 )
     {
       cur = popObject(l);
-      
+
       if ( reachedGoal(cur) )
-	potentialSol(cur);
+	{
+	  updatePath(path, cur->index);
+	  possibleSolution(sol, path);
+
+	  if ( sol->size == nRec / 3 + nRec % 3 )
+	    break;
+	}
       
-      else if ( cur->g < generation )
-	for( int i=1; cur->mem[i].p!=NULL; i++ )
-	  pushObject(l, newObject(&cur->mem[i], cur));
+      else if ( cur->g + 1 < generation )
+	{
+	  updatePath(path, cur->index);
+
+	  for( int i=cur->index+1; i<memSize; i++ )
+	    pushObject(l, newObject(mem, i, cur));	    
+	}
+
+      freeObject(cur);
     }
 
-  free(l);
-  
-  if ( optimalSolution!=NULL )
-    {
-      printPath(optimalSolution);
-      putchar('\n');
-    }
+  if ( sol->size != 0 )
+    printPath(mem, sol);
 
   else
     {
       generation++;
-      solve(mem);
+      
+      free(path);
+      free(sol);
+      free(l);
     }
 }
 
-void initiateList(List *l, Memory *m)
+void initiateStack(List *l, Memory *mem)
 {
-  for ( int i=0; i<memSize; i++ )
-      pushObject(l, newObject(&m[i], NULL));
+  for( int i=0; i<memSize; i++ )
+    pushObject(l, newObject(mem, i, NULL));
 }

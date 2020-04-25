@@ -1,16 +1,16 @@
 #include "object.h"
 
-Object *newObject(Memory *mem, Object *pai)
+Object *newObject(Memory *mem, int index, Object *pai)
 {
   Object *obj = (Object *)calloc(1, sizeof(Object));
 
   if ( obj==NULL )
     errorMessageMem("newObject");
   
-  obj->mem = mem;
+  obj->index = index;
 
   obj->pai = pai;
-
+  
   obj->g = pai==NULL ? 0: pai->g + 1;
   
   obj->rec = (char *)calloc(nRec+1, sizeof(char));
@@ -21,17 +21,17 @@ Object *newObject(Memory *mem, Object *pai)
   obj->h = nRec;
   
   for( int i=0; i<3; i++ )
-    if ( mem->rec[i] )
+    if ( mem[index].rec[i] )
       {
-	obj->rec[mem->rec[i]] = 1;
+	obj->rec[mem[index].rec[i]] = '1';
         obj->h--;
       }
   
   if ( pai!=NULL )
-    for( int i=0; i<=nRec; i++ )
-      if ( pai->rec[i] )
+    for( int i=1; i<=nRec; i++ )
+      if ( pai->rec[i]=='1' && obj->rec[i]!='1' )
 	{
-	  obj->rec[i] = 1;
+	  obj->rec[i] = '1';
 	  obj->h--;
 	}
 
@@ -40,9 +40,16 @@ Object *newObject(Memory *mem, Object *pai)
   return obj;	     
 }
 
+void freeObject(Object *obj)
+{
+  free(obj->rec);
+  free(obj);
+  obj = NULL;
+}
+
 void printObject(Object *obj)
 {
-  printPoint(obj->mem->p);
+  printf("%d\n", obj->index);
 
   printRec(obj->rec, nRec+1);
 
@@ -62,14 +69,4 @@ void printRec(char *arr, int n)
     }
 
   printf("}\n");
-}
-
-void printPath(Object *cur)
-{
-  if ( cur==NULL )
-    return;
-
-  printPoint(cur->mem->p);
-
-  printPath(cur->pai);
 }

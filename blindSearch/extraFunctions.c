@@ -1,33 +1,53 @@
 #include "extraFunctions.h"
 
-
-int reachedGoal(Object *obj)
+int reachedGoal(Object *cur)
 {
   for( int i=1; i<=nRec; i++ )
-    if ( !obj->rec[i] )
+    if ( cur->rec[i]!='1' )
       return 0;
 
   return 1;
 }
 
-void potentialSol(Object *cur)
+void updatePath(list *path, int index)
 {
-  optimalSolution = optimalSolution==NULL || pathSize(optimalSolution) > pathSize(cur) ? cur: optimalSolution;
+  while ( !isEmpty(path) && top(path) > index )
+    pop(path);
+
+  push(path, index);
 }
 
-int pathSize(Object *cur)
+void printPath(Memory *mem, list *path)
+{
+  printf("%d\n", path->size);
+  
+  while ( !isEmpty(path) )
+    printPoint(mem[pop(path)].p);
+
+  putchar('\n');
+}
+
+void printPath1(Memory *mem, Object *cur)
 {
   if ( cur==NULL )
-    return 0;
+    {
+      putchar('\n');
+      return;
+    }
+  
+  printPoint(mem[cur->index].p);
 
-  else
-    return 1 + pathSize(cur->pai);
+  printPath1(mem, cur->pai);  
 }
 
-void saveMemory(Object *obj)
+void possibleSolution(list *sol, list *path)
 {
-  if ( obj==NULL )
-    return;
+  if ( sol->size==0 || sol->size >= path->size )
+    {
+      while( !isEmpty(sol) )
+	dequeue(sol);
 
-  free(obj->rec);  
+      for( lnode *cur = path->first->next; cur!=path->last; cur=cur->next )
+	enqueue(sol, cur->value);
+    }
 }

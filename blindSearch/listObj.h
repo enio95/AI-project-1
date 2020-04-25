@@ -40,6 +40,6 @@ Object *dequeueObject(List *l);
 
 int objectListSize(List *l);
 
-void printList(List *l);
+void prinObjecttList(List *l);
 
 #endif

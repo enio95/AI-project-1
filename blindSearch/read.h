@@ -9,8 +9,6 @@
 #include "point.c"
 #endif
 
-#define READINPUT
-
 #define MAXSIZE 1024
 
 typedef struct

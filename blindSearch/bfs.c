@@ -2,10 +2,11 @@
 #include "read.c"
 #include "object.c"
 #include "listObj.c"
+#include "list.c"
 #include "extraFunctions.c"
 
 void solve(Memory *mem);
-void initiateList(List *l, Memory *m);
+void initiateQueue(List *l, Memory *m);
 
 int main()
 {
@@ -17,8 +18,6 @@ int main()
       Memory *mem = newMemory();
       
       readInput(mem);
-      
-      //printMemory(mem);
       
       solve(mem);
 
@@ -32,31 +31,31 @@ void solve(Memory *mem)
 {
   List *l = newObjectList();
 
-  initiateList(l, mem);
+  initiateQueue(l, mem);
   
-  Object *cur;
+  Object *cur, *sol=NULL;
 
   while ( objectListSize(l)!=0 )
     {
       cur = popObject(l);
       
       if ( reachedGoal(cur) )
-	potentialSol(cur);
+        sol = sol==NULL || sol->g > cur->g ? cur: sol;
       
       else
-	for( int i=1; cur->mem[i].p!=NULL; i++ )
-	  enqueueObject(l, newObject(&cur->mem[i], cur));
+	  for( int i=cur->index+1; i<memSize; i++ )
+	    enqueueObject(l, newObject(mem, i, cur));
+
+      free(cur->rec);
     }
 
-  printPath(optimalSolution);
-  putchar('\n');
+  printPath1(mem, sol);
+  
   free(l);
 }
 
-void initiateList(List *l, Memory *m)
+void initiateQueue(List *l, Memory *mem)
 {
-  for ( int i=0; i<memSize; i++ )
-      enqueueObject(l, newObject(&m[i], NULL));
+  for( int i=0; i<memSize; i++ )
+    enqueueObject(l, newObject(mem, i, NULL));
 }
-
-      
