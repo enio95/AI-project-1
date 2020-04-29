@@ -28,7 +28,7 @@ data1(X) :- X = [ [7, 27, 37, 38, 8],
 solve(Points) :-
     data1(M), flatten(M, MF), sort(MF, MFS),
 
-    length(Points, Len), Len #>= N, Len #>= 4,
+    length(Points, Len), Len #=< 10, Len #>= 4,
 
     Points #:: MFS,
 
