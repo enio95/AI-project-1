@@ -1,43 +1,60 @@
-#include <stdio.h>
-#include <stdlib.h>
-
+#ifndef READINPUT
 #define READINPUT
 
-#define MAXSIZE 1024
+#include "errorMessage.h"
+#include "point.h"
 
-typedef struct
+// change this value if max capacity is reached
+#define MAXSIZE 10240
+
+typedef struct PointMemory
 {
-  int x, y;
+  Point *p;
+
+  int nR; 
+
+  int idR[3]; 
   
-}Point;
+}PointMemory;
+
+typedef struct RecMemory
+{
+  int idR;
+
+  Point *idP;
+
+  int nP;
+  
+}RecMemory;
 
 typedef struct
 {
-  Point p;
-
-  int nr; 
-
-  int rec[3]; 
+  struct PointMemory *pMem;
+  int pMemSize, pMemMaxSize;
+  
+  struct RecMemory *rMem;  
+  int rMemMaxSize;
   
 }Memory;
 
-// global variables
-int memSize = 0, nRec = 0;
+Memory *newMemory(int rMemSize);
 
-int comparePoint(Point *, Point *);
-void printPoint(Point *);
+void readInput(Memory *mem, int nR);
+void readLine(Memory *mem, RecMemory *rMem);
+  
+void addToPointMemory(Memory *mem, int index, Point *p, int idR);
+int searchPointMemory(PointMemory *pMem, Point *p, int iLim);
 
-Memory *newMemory();
-void freeMemory(Memory *);
+void printMemory(Memory *mem);
+void printPointMemory(PointMemory *pMem, int iLim);
+void printArray(int arr[], int iLim);
+void printRecMemory(RecMemory *rMem, int iLim);
 
-void readInput(Memory *);
-void readLine(Memory *);
+void sortPointMemory(PointMemory *pMem, int iLim);
+int comparePointMemory(const void *a, const void *b);
 
-void addRec(Memory *, Point *, int);
-int voidPos(Memory *);
+void freeMemory(Memory *mem);
+void freePointMemory(PointMemory *pMem, int iLim);
+void freeRecMemory(RecMemory *rMem, int iLim);
 
-int searchMemory(Memory *, Point *);
-
-void printMemory(Memory *);
-void printMember(Memory *mem);
-void printRecAdj(Memory *);
+#endif

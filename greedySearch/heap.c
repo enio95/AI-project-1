@@ -6,15 +6,15 @@
 
 /*----------------------------Compare----------------------------*/
 /* HeapMin*/
-//int compareKey(hnode *a, hnode *b) { return a->key - b->key; }
+//int compareKey(Hnode *a, Hnode *b) { return a->key - b->key; }
 
 /* heapMax*/
-int compareKey(hnode *a, hnode *b) { return b->key - a->key; }
+int compareKey(Hnode *a, Hnode *b) { return b->key - a->key; }
 
 /*----------------------------newHeap----------------------------*/
-heap *newHeap()
+Heap *newHeap()
 {
-  heap *new = (heap *)malloc(sizeof(heap));
+  Heap *new = (Heap *)malloc(sizeof(Heap));
 
   if ( new==NULL )
     errorMessageMem("newHeap");
@@ -29,7 +29,7 @@ heap *newHeap()
 }
 
 /*-----------------------------Insert-----------------------------*/
-void insertInHeap(heap *h, int vert, int key)
+void insertInHeap(Heap *h, int vert, int key)
 {
   if ( vert != h->memSize )
     errorMessageIndex("insertInHeap");
@@ -46,7 +46,7 @@ void insertInHeap(heap *h, int vert, int key)
 }
 
 /*----------------------------extract----------------------------*/
-int extractFromHeap(heap *h)
+int extractFromHeap(Heap *h)
 {
   int temp = h->arr[0].vert;
   
@@ -60,7 +60,7 @@ int extractFromHeap(heap *h)
 }
 
 /*-----------------------------change----------------------------*/
-void changeValue(heap *h, int vert, int key)
+void changeValue(Heap *h, int vert, int key)
 {
   if ( h->mem[vert] >= h->size )
     return;
@@ -70,7 +70,7 @@ void changeValue(heap *h, int vert, int key)
   sort(h, vert);
 }
 /*------------------------------Sort------------------------------*/
-void sort(heap *h, int vert)
+void sort(Heap *h, int vert)
 {
   sortDown(h, vert);
   sortUp(h, vert);
@@ -78,7 +78,7 @@ void sort(heap *h, int vert)
 
 #define left(i) ( i*2 + 1 )
 #define right(i) ( i*2 + 2 )
-void sortDown(heap *h, int vert)
+void sortDown(Heap *h, int vert)
 {
   if ( vert >= h->memSize || vert < 0)
     return;
@@ -104,7 +104,7 @@ void sortDown(heap *h, int vert)
 }
 
 #define father(i) ( (i-1) / 2 )
-void sortUp(heap *h, int vert)
+void sortUp(Heap *h, int vert)
 {
   if ( vert >= h->memSize || vert < 0)
     return;
@@ -122,21 +122,21 @@ void sortUp(heap *h, int vert)
   sortUp(h, h->arr[father(ind)].vert);
 }
 
-void swap(heap *h, int a, int b)
+void swap(Heap *h, int a, int b)
 {
   h->mem[ h->arr[a].vert ] = b;
   h->mem[ h->arr[b].vert ] = a;
 
-  hnode temp = h->arr[a];
+  Hnode temp = h->arr[a];
 
   h->arr[a] = h->arr[b];
   h->arr[b] = temp;
 }
 
-int heapIsEmpty(heap *h) { return h->size==0 ? 1: 0; }
+int heapIsEmpty(Heap *h) { return h->size==0 ? 1: 0; }
 
 /*------------------------Memory management------------------------*/
-void moreMemory(heap *h)
+void moreMemory(Heap *h)
 {
   if ( h->size > h->maxSize || h->maxSize==0 )
     {
@@ -146,7 +146,7 @@ void moreMemory(heap *h)
       else
 	h->maxSize *= 2;
 
-      h->arr = (hnode *)realloc(h->arr, h->maxSize * sizeof(hnode));
+      h->arr = (Hnode *)realloc(h->arr, h->maxSize * sizeof(Hnode));
 
       if ( h->arr == NULL )
 	errorMessageMem("moreMemory");
@@ -167,23 +167,23 @@ void moreMemory(heap *h)
     }
 }
 
-void destroyHeap(heap *h)
+void destroyHeap(Heap *h)
 {
   free(h->mem); free(h->arr); free(h);
 }
 
 /*---------------------------print heap---------------------------*/
-void printSize(heap *h)
+void printSize(Heap *h)
 { printf("HeapMaxSize = %d, heapSize = %d\n", h->maxSize, h->size); }
 
-void printHeap(heap *h)
+void printHeap(Heap *h)
 {
   printSize(h);
   
   auxPrint(h, 0, 0);
 }
 
-void auxPrint(heap *h, int level, int start)
+void auxPrint(Heap *h, int level, int start)
 {
   printf("\nLevel = %d\n", level);
 

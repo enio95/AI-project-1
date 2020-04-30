@@ -1,98 +1,110 @@
-#include "heap.c"
-#include "read.c"
+#include <stdio.h>
+#include <stdlib.h>
 
-void solve(Memory *mem, heap *h);
+#include "read.h"
+#include "heap.h"
 
-void update(Memory *mem, heap *h, int *arr, int index);
-void updateMember(Memory *mem, int *arr);
+/* Greedy approach does not guarantee an optimal solution
+   but is by FAR the fastest method*/
 
-int contained(int v, int *arr);
-void initiateArray(int *arr, int n, int v);
+void solve(Memory *mem);
+void initiateHeap(PointMemory *mem, Heap *h, int iLim);
+void copyArray(int *arr, int *vec, int iLim);
+void update(PointMemory *pMem, Heap *h, int *rec, int iLim);
+void updatePosition(PointMemory *pMem, int *arr);
+int member(int v, int *arr, int iLim);
 
   
 int main()
 {
-  int num;
-  scanf("%d", &num);
+  int wrSize;
+  scanf("%d", &wrSize);
 
-  for( int i=0; i<num; i++ )
+  for( int i=0; i<wrSize; i++ )
     {
-      Memory *mem = newMemory();
-      heap *h = newHeap();
+      int caseSize;
+      scanf("%d", &caseSize);
       
-      readInput(mem);
-      
-      for( int i=0; i<memSize; i++ )
-	insertInHeap(h, i, mem[i].nr);
-      
-      solve(mem, h);
+      Memory *mem = newMemory(caseSize);
+      readInput(mem, caseSize);
 
-      memSize = 0;
+      solve(mem);
       
-      freeMemory(mem); destroyHeap(h);
-
-      putchar('\n');
+      freeMemory(mem);
     }
   
   return 0;
 }
 
-void solve(Memory *mem, heap *h)
+void solve(Memory *mem)
 {
-  int index;
+  Heap *h = newHeap();
+  initiateHeap(mem->pMem, h, mem->pMemSize);
+
+  int solSize = 0;
   
   while ( !heapIsEmpty(h) )
     {
-      index = extractFromHeap(h);
+      int index = extractFromHeap(h);
 
-      if ( mem[index].nr==0 )
+      if ( mem->pMem[index].nR==0 )
 	break;
 
-      printPoint(&mem[index].p);
-
-      update(mem, h, mem[index].rec, index);
-
-      mem[index].nr = 0;
+      solSize++;
       
-      initiateArray(mem[index].rec, 3, 0);
+      printPoint(mem->pMem[index].p);
+
+      int arr[3];
+      copyArray(arr, mem->pMem[index].idR, 3);
+      
+      update(mem->pMem, h, arr, mem->pMemSize);
+    }
+  
+
+  printf("Solution Size = %d\nEND\n\n", solSize);
+  destroyHeap(h);
+}
+
+void initiateHeap(PointMemory *mem, Heap *h, int iLim)
+{
+  for( int i=0; i<iLim; i++ )
+    insertInHeap(h, i, mem[i].nR);
+}
+
+void copyArray(int *arr, int *vec, int iLim)
+{
+  for( int i=0; i<iLim; i++ )
+    arr[i] = vec[i];
+}
+
+void update(PointMemory *pMem, Heap *h, int *rec, int iLim)
+{
+  for( int i=0; i<iLim; i++ )
+    {
+      updatePosition(&pMem[i], rec);
+
+      changeValue(h, i, pMem[i].nR);
     }
 }
 
-void update(Memory *mem, heap *h, int *arr, int index)
+void updatePosition(PointMemory *pMem, int *arr)
 {
-  for( int i=0; i<memSize; i++ )
-    if ( i!=index )
-      {
-	updateMember(&mem[i], arr);
-
-	changeValue(h, i, mem[i].nr);
-      }
-}
-
-void updateMember(Memory *mem, int *arr)
-{
-  if ( mem->nr==0 )
+  if ( pMem->nR==0 )
     return;
-  
+
   for( int i=0; i<3; i++ )
-    if ( mem->rec[i]!=0 && contained(mem->rec[i], arr) )
+    if ( pMem->idR[i]!=0 && member(pMem->idR[i], arr, 3) )
       {
-	mem->rec[i] = 0;
-	mem->nr--;
+	pMem->idR[i]=0;
+	pMem->nR--;
       }
 }
 
-int contained(int v, int *arr)
+int member(int v, int *arr, int iLim)
 {
-  for( int i=0; i<3; i++ )
-    if ( v == arr[i] )
+  for( int i=0; i<iLim; i++ )
+    if ( arr[i]==v )
       return 1;
 
   return 0;
-}
-
-void initiateArray(int *arr, int n, int v)
-{
-  for( int i=0; i<n; i++ )
-    arr[i] = v;
 }

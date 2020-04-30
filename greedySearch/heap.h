@@ -1,13 +1,10 @@
 #ifndef HEAP
 #define HEAP
 
-#ifndef ERROR
-#include "errorMessage.c"
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "errorMessage.h"
 
 /*----------------------------------------------------------------
   --------------------------Made by Énio--------------------------
@@ -19,52 +16,52 @@ typedef struct
 
   int vert;
   
-}hnode;
+}Hnode;
 
-typedef struct heap
+typedef struct Heap
 {
   int size, maxSize;
   
-  hnode *arr;
+  Hnode *arr;
 
   int memSize, memMaxSize;
 
   int *mem;
   
-} heap;
+} Heap;
   
 
 /*----------------------------Compare----------------------------*/
-int compareKey(hnode *, hnode *);
+int compareKey(Hnode *, Hnode *);
 
 /*----------------------------newHeap----------------------------*/
-heap *newHeap();
+Heap *newHeap();
 
 /*-----------------------------Insert-----------------------------*/
-void insertInHeap(heap *, int, int);
+void insertInHeap(Heap *, int, int);
 
 /*-----------------------------change----------------------------*/
-void changeValue(heap *, int, int);
+void changeValue(Heap *, int, int);
 
 /*----------------------------extract----------------------------*/
-int extractFromHeap(heap *);
+int extractFromHeap(Heap *);
 
 /*------------------------Memory management------------------------*/
-void moreMemory(heap *);
+void moreMemory(Heap *);
 
-void destroyHeap(heap *);
+void destroyHeap(Heap *);
 
 /*------------------------------Sort------------------------------*/
-void sort(heap *, int);
-void sortDown(heap *, int);
-void sortUp(heap *, int);
-void swap(heap *, int, int);
-int heapIsEmpty(heap *);
+void sort(Heap *, int);
+void sortDown(Heap *, int);
+void sortUp(Heap *, int);
+void swap(Heap *, int, int);
+int heapIsEmpty(Heap *);
 
 /*---------------------------print heap---------------------------*/
-void printHeap(heap *);
-void printSize(heap *);
-void auxPrint(heap *, int, int);
+void printHeap(Heap *);
+void printSize(Heap *);
+void auxPrint(Heap *, int, int);
 
 /*-------------------------Non related func-------------------------*/
 int power(int b, int exp);
