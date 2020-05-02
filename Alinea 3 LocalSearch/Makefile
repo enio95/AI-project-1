@@ -10,7 +10,10 @@ OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 $(ODIR)/%.o: %.c $(DEPS)
 	$(CC) -o $@ -c $< $(CFLAGS) 
 
-all: localSearch
+all: localSearch iterativeLocalSearch
+
+iterativeLocalSearch: $(ODIR)/iterativeLocalSearch.o $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS)
 
 localSearch: $(ODIR)/localSearch.o $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
