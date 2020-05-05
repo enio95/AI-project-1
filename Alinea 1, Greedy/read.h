@@ -7,16 +7,18 @@
 // change this value if max capacity is reached
 #define MAXSIZE 10240
 
+//define PointMemory, estructura constituída por um Ponto, o número de retângulos adjacentes e o identificador desses retângulos
 typedef struct PointMemory
 {
   Point *p;
 
   int nR; 
 
-  int idR[3]; 
+  int idR[3]; //só pode ter no máximo três retângulos adjacentes, daí o tamanho máximo ser 3
   
 }PointMemory;
 
+//define RecMemory, estructura constítuida por um identificador de retângulos, array de Pontos que lhe pertencem e **nP**
 typedef struct RecMemory
 {
   int idR;
@@ -27,6 +29,7 @@ typedef struct RecMemory
   
 }RecMemory;
 
+//define Memory, estructura constítuida por os Pontos e Retângulos
 typedef struct
 {
   struct PointMemory *pMem;
@@ -37,6 +40,7 @@ typedef struct
   
 }Memory;
 
+//API
 Memory *newMemory(int rMemSize);
 
 void readInput(Memory *mem, int nR);

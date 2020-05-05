@@ -6,12 +6,14 @@
 
 #include "errorMessage.h"
 
+//vértice, representado por um ponto com duas coordenadas
 typedef struct Point
 {
   int x, y;
   
 }Point;
 
+//API
 Point *newPoint(int x, int y);
 int equalPoint(Point *a, Point *b);
 int comparePoint(Point *a, Point *b);
