@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//API de errors
 void errorMessageIndex(char *);
 void errorMessageMem(char *);
 void errorMessageIllegalSize(char *);
