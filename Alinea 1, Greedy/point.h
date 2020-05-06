@@ -6,17 +6,23 @@
 
 #include "errorMessage.h"
 
-//vértice, representado por um ponto com duas coordenadas
 typedef struct Point
 {
   int x, y;
   
 }Point;
 
-//API
+/* Aloca dinamicamente memoria para um novo ponto
+   com coordenadas x e y e retorna o seu apontador*/
 Point *newPoint(int x, int y);
+
+/* Retorna 1 se dois pontos são iguais 0 caso contrario.*/
 int equalPoint(Point *a, Point *b);
+
+/* */
 int comparePoint(Point *a, Point *b);
+
+/* */
 void printPoint(Point *p);
 
 #endif

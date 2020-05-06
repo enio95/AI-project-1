@@ -14,92 +14,116 @@ void update(PointMemory *pMem, Heap *h, int *rec, int iLim);
 void updatePosition(PointMemory *pMem, int *arr);
 int member(int v, int *arr, int iLim);
 
-  
+
+/* wrSize --> numero de casos a analisar
+   caseSize --> numero de rectangulos num dado caso*/
 int main()
 {
-  int wrSize; //número de instâncias
+  int wrSize; 
   scanf("%d", &wrSize);
 
   for( int i=0; i<wrSize; i++ )
     {
-      int caseSize; //número de retângulos
+      int caseSize; 
       scanf("%d", &caseSize);
       
-      Memory *mem = newMemory(caseSize); //cria instância de Memory
-      readInput(mem, caseSize); //lê todo o input
+      Memory *mem = newMemory(caseSize); 
+      readInput(mem, caseSize); 
 
-      solve(mem); //resolve o algoritmo
+      solve(mem); 
       
-      freeMemory(mem); //liberta o espaço na memória para a próxima instância 
+      freeMemory(mem); 
     }
   
   return 0;
 }
 
-//resolve o problema
+/* Esta função encontra uma solução atraves do metodo greedy.
+   Consiste em: 
+   1) Inicializar uma heap, em que os indices dos pontos guardados
+      em PointMemory representa os vertices da heap e as chaves o 
+      numero de rectangulos adjacentes do dado ponto.
+   2) Retirar da heap o ponto com mais rectangulos adjacentes
+      i.e maior chave
+   3) Fazer update, que consiste em remover todos os rectangulos
+      visto pelo ponto dos outros pontos da heap
+   4) Verificar se temos uma solução i.e se todos os rectangulos estão
+      vigiados, caso se verifique saimos da função, caso contrario 
+      voltamos ao ponto 2).*/
 void solve(Memory *mem)
 {
-  Heap *h = newHeap(); //cria uma nova heap 
-  initiateHeap(mem->pMem, h, mem->pMemSize); //inicializa a heap com o conteúdo dos pontos contidos no array PointMemory
+  Heap *h = newHeap();
+  initiateHeap(mem->pMem, h, mem->pMemSize); 
 
-  int solSize = 0; //tamanho da solução
+  int solSize = 0; 
   
   while ( !heapIsEmpty(h) )
     {
-      int index = extractFromHeap(h); //extrai o índice do PointMemory com número de retângulos adjacentes maior
+      // extrai o ponto com mais rectangulos vigiados
+      int index = extractFromHeap(h); 
 
-      if ( mem->pMem[index].nR==0 )	//termina o ciclo se chegar a um ponto que não tem retângulos adjacentes
+      /* Significa que encontramos uma solução pois 
+	 o resto dos pontos da heap não vêm mais
+	 rectangulos*/
+      if ( mem->pMem[index].nR==0 )
 	break;
 
-      solSize++;  //incrementa o tamanho da solução
+      solSize++;  
       
-      printPoint(mem->pMem[index].p); //imprime as coordenadas de um dos pontos onde se colocará a guarda
+      printPoint(mem->pMem[index].p); 
 
+      /* As seguintes linhas fazem update dos pontos que ja vimos*/
       int arr[3];
-      copyArray(arr, mem->pMem[index].idR, 3); //copia o array de identificadores do Ponto com índice index para arr
-      
-      update(mem->pMem, h, arr, mem->pMemSize); //atualiza a heap 
+      copyArray(arr, mem->pMem[index].idR, 3);       
+      update(mem->pMem, h, arr, mem->pMemSize); 
     }
   
 
-  printf("Solution Size = %d\nEND\n\n", solSize); //imprime o tamanho da solução
-  destroyHeap(h); //destrói a heap
+  printf("Solution Size = %d\nEND\n\n", solSize); 
+  destroyHeap(h); 
 }
 
-//insere todos os pontos em PointMemory na heap
+/* Esta função põe os indices de todos os pontos contidos
+   em PointMemory na Heap*/
 void initiateHeap(PointMemory *mem, Heap *h, int iLim)
 {
   for( int i=0; i<iLim; i++ )
     insertInHeap(h, i, mem[i].nR);
 }
 
-//copia dois arrays 
+/* Copia o conteudo do array vec[] para o array arr[]*/
 void copyArray(int *arr, int *vec, int iLim)
 {
   for( int i=0; i<iLim; i++ )
     arr[i] = vec[i];
 }
 
-//atualiza as pontos e reorganiza a heap
+/* Esta é a função mais importante de todo o programa
+   Basicamente ela remove em todas as possições de 
+   PointeMemory os rectangulos que ja vimos e tambem 
+   atualiza a heap*/
 void update(PointMemory *pMem, Heap *h, int *rec, int iLim)
 {
   for( int i=0; i<iLim; i++ )
     {
-      updatePosition(&pMem[i], rec); //atualiza os valores dos Pontos no array PointMemory 
+      updatePosition(&pMem[i], rec); 
 
-      changeValue(h, i, pMem[i].nR); //atualiza os valores na heap 
+      changeValue(h, i, pMem[i].nR);
     }
 }
 
-//atualiza os valores do Ponto de modo a reorganizar-se a heap
+/* Nesta função, iremos remover de uma  posição 
+   de memoria aka ponto, os rectangulos que ja vimos.*/
 void updatePosition(PointMemory *pMem, int *arr)
 {
-  if ( pMem->nR==0 ) //retorna se o ponto não tiver retângulos adjacentes
+  /*retorna se o ponto não tiver retângulos adjacentes*/
+  if ( pMem->nR==0 ) 
     return;
 
-//atualiza o número de retângulos adjacente de um certo ponto de modo a que,
-//se o tal ponto partilhar identificadores de retângulos no seu array com arr 
-//esses identificadores são retirados e o número de retângulos decrementado
+  /* Basicamente se o ponto conter um identificador do 
+     rectangulo adjacente que estaja contido em arr[],
+     em que arr[] é o conjunto de rectangulos que ja vimos, 
+     então removemos este rectangulo deste ponto*/
   for( int i=0; i<3; i++ ) 
     if ( pMem->idR[i]!=0 && member(pMem->idR[i], arr, 3) )
       {
@@ -108,7 +132,8 @@ void updatePosition(PointMemory *pMem, int *arr)
       }
 }
 
-//retorna se um valor é pertencente a um array ou não
+/* Retorna 1 caso v pertença a arr[],
+   caso contrario 0.*/
 int member(int v, int *arr, int iLim)
 {
   for( int i=0; i<iLim; i++ )
