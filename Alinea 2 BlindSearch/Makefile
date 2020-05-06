@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS=-I. -Wall
 DEPS = heap.h stateArray.h extraFunctions.h integerLinkedList.h stateLinkedList.h state.h errorMessage.h point.h read.h
 
-ODIR=bin
+ODIR=./bin
 
 _OBJ = heap.o stateArray.o extraFunctions.o integerLinkedList.o stateLinkedList.o state.o errorMessage.o point.o read.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
