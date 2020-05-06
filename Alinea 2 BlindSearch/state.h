@@ -35,15 +35,35 @@ typedef struct State
   
 }State;
 
+
+/* Aloca dinamicamente memoria para um novo estado e retorna o seu apontador.
+   Esta função ira copiar toda a informação contida em pai e ira adicionar 
+   um novo ponto que esta no indice index. 
+   Caso o pai seja null, então iremos buscar apenas a informação contida no 
+   ponto de indice index
+   nRec -> Nº maximo de rectangulos*/
 State *newState(PointMemory *pMem, int index, State *pai, int nRec);
+
+/* Copia o conteudo de vec para arr, de 0 à iLim*/
 void copyIntArray(int *arr, int *vec, int iLim);
+
+/* Adiciona os rectangulos adjancentes do novo ponto (vec*)
+   ao array idR do estado (arr)*/
 void getNewRectangles(int *arr, int *vec, int iLim);
+
+/* Calcula o numero de rectangulos que o estado state esta a ver*/
 void calculateSeen(State *state, int iLim);
 
+/* Liberta a memoria alocada dinamicamente em newState/4*/
 void freeState(State *state);
+
+/* Liberta o array idR*/
 void freeStateIdR(State *state);
 
+/* Faz print de todas as variaveis contidas em state*/
 void printState(State *state);
+
+/* Faz print de um array de 1 á iLim*/
 void printIntArray(int *arr, int iLim);
   
 #endif

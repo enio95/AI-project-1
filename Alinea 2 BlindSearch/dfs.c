@@ -10,6 +10,8 @@
 void solve(Memory *mem);
 void initiateStack(SList *l, PointMemory *pMem, int iLim, int nRec);
 
+/* wrSize --> numero de casos a analisar
+   caseSize --> numero de rectangulos num dado caso*/
 int main()
 {
   int wrSize;

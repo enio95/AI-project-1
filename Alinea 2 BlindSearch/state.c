@@ -13,6 +13,7 @@ State *newState(PointMemory *pMem, int index, State *pai, int nRec)
 
   state->pai = pai;
 
+  /* Formula para o calcula do numero de pontos que ja vimos*/
   state->g = pai==NULL ? 1: pai->g + 1;
 
   state->idR = (int *)calloc(nRec+1, sizeof(int));
@@ -29,8 +30,9 @@ State *newState(PointMemory *pMem, int index, State *pai, int nRec)
 
   int temp = nRec - state->seen;
  
+  /* Formula para o numero minimo de pontos que nos falta ver*/
   state->h = temp/3 + (temp%3==0 ? 0: 1);
-  
+
   state->f = state->g + state->h;
 
   return state;

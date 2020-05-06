@@ -2,15 +2,15 @@
 
 Memory *newMemory(int rMemSize)
 {
-  Memory *mem = (Memory *)calloc(1, sizeof(Memory));
+  Memory *mem = (Memory *)calloc(1, sizeof(Memory)); 
 
   if ( mem==NULL )
     errorMessageMem("newMemory");
 
-  mem->pMemSize = 0;
-  mem->pMemMaxSize = MAXSIZE;
+  mem->pMemSize = 0; 
+  mem->pMemMaxSize = MAXSIZE; 
 
-  mem->pMem = (PointMemory *)calloc(mem->pMemMaxSize, sizeof(PointMemory));
+  mem->pMem = (PointMemory *)calloc(mem->pMemMaxSize, sizeof(PointMemory)); 
 
   if ( mem->pMem==NULL )
     errorMessageMem("newMemory");
@@ -33,6 +33,8 @@ void readInput(Memory *mem, int nR)
   sortPointMemory(mem->pMem, mem->pMemSize);
 }
  
+/* idR -> identificador do retangulo
+   nP -> numero de pontos a ler*/
 void readLine(Memory *mem, RecMemory *rMem)
 {
   int idR, nP;
@@ -41,7 +43,7 @@ void readLine(Memory *mem, RecMemory *rMem)
   rMem->idR = idR;
   
   rMem->nP = nP;
-  rMem->idP = (Point *)calloc(nP, sizeof(Point));
+  rMem->idP = (Point *)calloc(nP, sizeof(Point)); 
 
   if ( rMem->idP==NULL )
     errorMessageMem("readLine");
@@ -54,7 +56,7 @@ void readLine(Memory *mem, RecMemory *rMem)
 
       int index = searchPointMemory(mem->pMem, &p, mem->pMemSize);
       
-      addToPointMemory(mem, index, &p, idR);
+      addToPointMemory(mem, index, &p, idR); 
       
       rMem->idP[i].x = p.x;
       rMem->idP[i].y = p.y;
@@ -63,17 +65,19 @@ void readLine(Memory *mem, RecMemory *rMem)
 
 void addToPointMemory(Memory *mem, int index, Point *p, int idR)
 {
-  if ( mem->pMem[index].p==NULL )
+  if ( mem->pMem[index].p==NULL ) 
     mem->pMem[index].p = newPoint(p->x, p->y);
-  
-  mem->pMem[index].idR[mem->pMem[index].nR] = idR;
+
+  /* mem->pMem[index].nR --> numero de rectangulos adjacentes
+     mem->pMem[index].idR --> identificação dos rectangulos adj*/ 
+  mem->pMem[index].idR[mem->pMem[index].nR] = idR; 
 
   mem->pMem[index].nR++;
   
-  if ( mem->pMemSize==index )
+  if ( mem->pMemSize==index ) 
     mem->pMemSize++;
 
-  if ( mem->pMemSize==mem->pMemMaxSize )
+  if ( mem->pMemSize==mem->pMemMaxSize ) 
     errorMessageMaxCapacity("addToPointMemory");
 }
 
