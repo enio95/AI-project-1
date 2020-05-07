@@ -1,0 +1,11 @@
+#!/bin/bash
+
+counter=1
+
+echo $1 > $4
+
+while [ $counter -le $1 ]
+do
+    /usr/bin/time --format "%e" $2 < $3 > /dev/null 2>> $4
+    ((counter++))
+done
