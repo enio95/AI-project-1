@@ -13,7 +13,6 @@ State *newState(PointMemory *pMem, int index, State *pai, int nRec)
 
   state->pai = pai;
 
-  /* Formula para o calcula do numero de pontos que ja vimos*/
   state->g = pai==NULL ? 1: pai->g + 1;
 
   state->idR = (int *)calloc(nRec+1, sizeof(int));
@@ -30,10 +29,43 @@ State *newState(PointMemory *pMem, int index, State *pai, int nRec)
 
   int temp = nRec - state->seen;
  
-  /* Formula para o numero minimo de pontos que nos falta ver*/
   state->h = temp/3 + (temp%3==0 ? 0: 1);
-
+  
   state->f = state->g + state->h;
+
+  return state;
+}
+
+State *copyState(State *prev)
+{
+  State *state = (State *)calloc(1, sizeof(State));
+
+  if ( state==NULL )
+    errorMessageMem("newState");
+
+  state->iLim = prev->iLim;
+  
+  state->index = prev->index;
+
+  state->pai = prev->pai;
+
+  state->g = prev->g;
+
+  state->h = prev->h;
+
+  state->f = prev->f;
+
+  state->seen = prev->seen;
+
+  state->sum = prev->sum;
+  
+  state->idR = (int *)calloc(state->iLim+1, sizeof(int));
+
+  if ( state->idR==NULL )
+    errorMessageMem("copyState");
+
+  for( int i=1; i<=state->iLim; i++ )
+    state->idR[i] = prev->idR[i];
 
   return state;
 }
@@ -53,8 +85,12 @@ void getNewRectangles(int *arr, int *vec, int iLim)
 void calculateSeen(State *state, int iLim)
 {
   for( int i=1; i<=iLim; i++ )
-    if ( state->idR[i] )
-      state->seen++;
+    {
+      if ( state->idR[i] )
+	state->seen++;
+
+      state->sum += state->idR[i];
+    }
 }
 
 void freeState(State *state)
