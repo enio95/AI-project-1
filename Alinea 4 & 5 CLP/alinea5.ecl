@@ -3,9 +3,7 @@
 :-lib(ic_global).
 :-lib(branch_and_bound).
 
-/*executa o algoritmo. Obtém a matriz, "alisa-sa", tornando numa única lista, e ordena-a, e constrói uma lista Points, ordenada e
-uma lista Color com valores entre 1 e o nº de retângulos. Instância Points com valores pertencentes ao seu domínio, a matriz modificada MFS e procura uma solução para
-o problema das guardas e reformulando a lista Color para que a soma dos seus valores seja o número mínimo de cores necessárias */
+%executa o algoritmo. 
 model1(Points, Color, Len, Sum) :-
     getMatrix(M), flatten(M, MF), sort(MF, MFS),
 
@@ -30,8 +28,7 @@ model1(Points, Color, Len, Sum) :-
     ic_global:sumlist(Color, Sum),
     
     minimize(labeling(Color), Sum).
-
-%Obtém 
+ 
 restrictColor(_, _, []).
 restrictColor(Points, Color, [Line|M]) :-
     lists:intersection(Points, Line, Inter),
