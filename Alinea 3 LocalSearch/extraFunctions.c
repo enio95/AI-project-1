@@ -66,10 +66,10 @@ int pickRandomPoint(PointMemory *pMem, char *seen, int iLim)
 
 void moveIndexLeft(int *index, int iLim)
 {
-  (*index)++;
+  (*index)--;
 
-  if ( (*index)>=iLim )
-    (*index)=0;
+  if ( (*index) < 0 )
+    (*index)=iLim-1;
 }
 
 /*-------------------------------Print---------------------------*/

@@ -19,7 +19,7 @@ void copyCharArray(char *arr, char *vec, int iLim);
 
 int main()
 {
-  //srand(time(NULL));
+  srand(time(NULL));
   
   int wrSize;
   scanf("%d", &wrSize);
@@ -82,7 +82,7 @@ State *ILS(Memory *mem, State *random, char *seen)
       
       cur = findLocalMinimum(mem, cur, curSeen);      
 
-      if ( cur->sum > minSol->sum && cur->g <= minSol->g )
+      if ( cur->g < minSol->g || ( cur->sum > minSol->sum && cur->g <= minSol->g ) )
 	{
 	  freeState(minSol);
 	  

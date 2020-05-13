@@ -26,8 +26,10 @@ model1(Points, Color, Len, Sum) :-
     isSolution(Points, M),
 
     restrictColor(Points, Color, M),
-
-    ic_global:sumlist(Color, Sum),
+    
+    Sum #>= Len, N1 is N*Len, Sum #=< N1,
+    
+    ic_global:sumlist(Color, Sum), 
     
     minimize(labeling(Color), Sum).
 
