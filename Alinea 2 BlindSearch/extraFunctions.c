@@ -1,5 +1,6 @@
 #include "extraFunctions.h"
 
+/*retorna 1(true) quando o estado em causa já visualizou todos os retângulos, isto é, a solução na forma do caminho até ele garante uma total cobertura dos retângulos.*/
 int isSolution(State *state)
 {
   for( int i=1; i<=state->iLim; i++ )
@@ -9,6 +10,7 @@ int isSolution(State *state)
   return 1;
 }
 
+/*auxilia o backtracking necessário a métodos de pesquisa em profundidade.*/
 void updatePath(IList *path, int index)
 {
   while ( path->size>0 && topInteger(path) > index )
@@ -17,6 +19,7 @@ void updatePath(IList *path, int index)
   pushInteger(path, index);  
 }
 
+/*obtém os valores dos estados no caminho-solução do algoritmo a ser analisado, garantindo que a lista sol, onde ficarão os valores dos estados, tem o tamanho da lista path, onde estão os estados-solução.*/
 void bestPath(IList *sol, IList *path)
 {
   if ( sol->size==0 || sol->size > path->size )
@@ -29,6 +32,7 @@ void bestPath(IList *sol, IList *path)
     }
 }
 
+/*escolhe pontos aleatórios até gerar um estado que seja solução, retornando o seu apontador.*/
 State *randomSolution(Memory *mem, char *seen)
 {
   State *state = NULL;
@@ -52,6 +56,7 @@ State *randomSolution(Memory *mem, char *seen)
   return state;
 }
 
+/*escolhe um índice aleatório e utiliza a função moveIndexLeft para retornar o índice de um ponto que ainda não foi escolhido.*/
 int pickRandomPoint(PointMemory *pMem, char *seen, int iLim)
 {
   int index = rand()%iLim;
@@ -64,6 +69,7 @@ int pickRandomPoint(PointMemory *pMem, char *seen, int iLim)
   return index;
 }
 
+/*decrementa o índice atual, retornando ao valor do número de pontos caso seja menor do que 0.*/
 void moveIndexLeft(int *index, int iLim)
 {
   (*index)++;

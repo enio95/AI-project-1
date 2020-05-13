@@ -3,10 +3,7 @@
 :- lib(branch_and_bound).
 :- lib(lists).
 
-%eu amanha vou meter isto no relatório e reformular para aqui mas deixo aqui até poder meter
-/*executa o algoritmo. Obtém a matriz, "alisa-sa", tornando numa única lista, e ordena-a, e constrói uma lista Points, ordenada e
-de todos valores únicos de tamanho entre o nº de retângulos a dividir por 3 e o nº de retângulos a dividir por 2, 
-que será instanciada por todas as permutações dos valores da matriz, encontrando-se a solução mínima utilizando-se branch_and_bound*/
+%executa o algoritmo. 
 model1(Points, Len) :-
     getMatrix(M), flatten(M, MF), sort(MF, MFS),
 
